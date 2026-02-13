@@ -1,5 +1,19 @@
 # 🎯 YOLO Detector
 
+## 🔗 Navegação
+
+**[🏠 AslamSys](https://github.com/AslamSys)** → **[📚 _system](https://github.com/AslamSys/_system)** → **[📂 Segurança (Jetson Orin Nano)](https://github.com/AslamSys/_system/blob/main/hardware/seguranca/README.md)** → **seguranca-yolo-detector**
+
+### Containers Relacionados (seguranca)
+- [seguranca-brain](https://github.com/AslamSys/seguranca-brain)
+- [seguranca-camera-stream-manager](https://github.com/AslamSys/seguranca-camera-stream-manager)
+- [seguranca-face-recognition](https://github.com/AslamSys/seguranca-face-recognition)
+- [seguranca-event-analyzer](https://github.com/AslamSys/seguranca-event-analyzer)
+- [seguranca-alert-manager](https://github.com/AslamSys/seguranca-alert-manager)
+- [seguranca-video-recorder](https://github.com/AslamSys/seguranca-video-recorder)
+
+---
+
 **Container:** `yolo-detector`  
 **Ecossistema:** Segurança  
 **Hardware:** Jetson Orin Nano 8GB  
@@ -152,10 +166,38 @@ import numpy as np
 from nats.aio.client import Client as NATS
 
 # Load YOLOv8n with TensorRT
+
+## 🔗 Navegação
+
+**[🏠 AslamSys](https://github.com/AslamSys)** → **[📚 _system](https://github.com/AslamSys/_system)** → **[📂 Segurança (Jetson Orin Nano)](https://github.com/AslamSys/_system/blob/main/hardware/seguranca/README.md)** → **seguranca-yolo-detector**
+
+### Containers Relacionados (seguranca)
+- [seguranca-brain](https://github.com/AslamSys/seguranca-brain)
+- [seguranca-camera-stream-manager](https://github.com/AslamSys/seguranca-camera-stream-manager)
+- [seguranca-face-recognition](https://github.com/AslamSys/seguranca-face-recognition)
+- [seguranca-event-analyzer](https://github.com/AslamSys/seguranca-event-analyzer)
+- [seguranca-alert-manager](https://github.com/AslamSys/seguranca-alert-manager)
+- [seguranca-video-recorder](https://github.com/AslamSys/seguranca-video-recorder)
+
+---
 model = YOLO('yolov8n.pt')
 model.export(format='engine', half=True)  # FP16
 
 # DeepSORT tracker
+
+## 🔗 Navegação
+
+**[🏠 AslamSys](https://github.com/AslamSys)** → **[📚 _system](https://github.com/AslamSys/_system)** → **[📂 Segurança (Jetson Orin Nano)](https://github.com/AslamSys/_system/blob/main/hardware/seguranca/README.md)** → **seguranca-yolo-detector**
+
+### Containers Relacionados (seguranca)
+- [seguranca-brain](https://github.com/AslamSys/seguranca-brain)
+- [seguranca-camera-stream-manager](https://github.com/AslamSys/seguranca-camera-stream-manager)
+- [seguranca-face-recognition](https://github.com/AslamSys/seguranca-face-recognition)
+- [seguranca-event-analyzer](https://github.com/AslamSys/seguranca-event-analyzer)
+- [seguranca-alert-manager](https://github.com/AslamSys/seguranca-alert-manager)
+- [seguranca-video-recorder](https://github.com/AslamSys/seguranca-video-recorder)
+
+---
 tracker = DeepSort(max_age=30, n_init=3)
 
 async def process_frame(frame, camera_id):
