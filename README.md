@@ -244,6 +244,47 @@ async def process_frame(frame, camera_id):
 
 ---
 
+## ⚡ Batch Dinâmico por Atividade
+
+O YOLO não processa todas as câmeras na mesma taxa o tempo todo. O `camera-stream-manager` sinaliza o nível de atividade de cada câmera via NATS, e o YOLO ajusta dinamicamente quantos frames por segundo consome de cada uma.
+
+### Modos de operação por câmera
+```yaml
+idle:    1 FPS   # Sem movimento detectado (diff de pixels baixo)
+active:  5 FPS   # Movimento presente (pessoa ou veículo em cena)
+alert:  10 FPS   # Evento crítico em andamento (máxima resolução temporal)
+```
+
+### Batch GPU unificado
+Independente do FPS por câmera, os frames são sempre agrupados em **batch único** antes de entrar na GPU:
+```
+cam_1 (active, 5fps)  ─┐
+cam_2 (idle,   1fps)  ─┤─► batch [N, 3, 640, 640] ─► TensorRT ─► N resultados
+cam_3 (alert, 10fps)  ─┤   (1 passagem GPU, não N passagens)
+cam_4 (idle,   1fps)  ─┘
+```
+Isso garante uso eficiente da GPU: uma única inferência TensorRT processa todos os frames disponíveis no momento, independente de quantos são.
+
+### Impacto no Jetson Orin Nano
+```yaml
+Cenário normal (câmeras ociosas):   GPU ~10%
+Cenário típico (1-2 câmeras ativas): GPU ~40%
+Cenário de pico (4 câmeras em alerta): GPU ~80-90%
+```
+O pico de quatro eventos simultâneos é improvável — o headroom existe para absorvê-lo sem degradação.
+
+### NATS — Sinal de atividade (recebido do camera-stream-manager)
+```javascript
+Topic: "seguranca.camera.activity"
+Payload: {
+  "camera_id": "cam_1",
+  "mode": "idle" | "active" | "alert",
+  "motion_score": 0.03   // 0.0 = estático, 1.0 = movimento total
+}
+```
+
+---
+
 ## 🔄 Changelog
 
 ### v1.0.0 (2024-11-27)
